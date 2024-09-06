@@ -1,0 +1,47 @@
+html, body, #root {
+  height: 100%;
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.card {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.dark-mode {
+  background-color: #333;
+  color: #fff;
+}
+
+.dark-mode .card {
+  background-color: #444;
+  color: #fff;
+}
+
+.dark-mode .list-group-item {
+  background-color: #555;
+  color: #fff;
+}
+
+.dark-mode .table {
+  color: #fff;
+}
+
+.dark-mode .form-control {
+  background-color: #555;
+  color: #fff;
+}
+
+.dark-mode .form-control:focus {
+  background-color: #666;
+  color: #fff;
+}
