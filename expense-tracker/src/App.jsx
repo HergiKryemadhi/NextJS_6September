@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Navbar, Container, Nav, Form } from 'react-bootstrap';
 import AddExpense from './components/AddExpense';
 import ExpenseList from './components/ExpenseList';
@@ -7,11 +7,13 @@ import Reports from './components/Reports';
 import Dashboard from './components/Dashboard';
 import { ExpenseProvider } from './context/ExpenseContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { AnimatePresence, motion } from 'framer-motion';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 function AppContent() {
   const { darkMode, toggleDarkMode } = useTheme();
+  const location = useLocation();
 
   return (
     <div className={`app-wrapper ${darkMode ? 'dark-mode' : ''}`}>
@@ -40,12 +42,14 @@ function AppContent() {
       </Navbar>
 
       <Container className="mt-3 mb-5 flex-grow-1">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/expenses" element={<ExpenseList />} />
-          <Route path="/add" element={<AddExpense />} />
-          <Route path="/reports" element={<Reports />} />
-        </Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageWrapper><Dashboard /></PageWrapper>} />
+            <Route path="/expenses" element={<PageWrapper><ExpenseList /></PageWrapper>} />
+            <Route path="/add" element={<PageWrapper><AddExpense /></PageWrapper>} />
+            <Route path="/reports" element={<PageWrapper><Reports /></PageWrapper>} />
+          </Routes>
+        </AnimatePresence>
       </Container>
 
       <footer className={`py-3 mt-auto ${darkMode ? 'bg-dark text-light' : 'bg-light text-dark'}`}>
@@ -54,6 +58,19 @@ function AppContent() {
         </Container>
       </footer>
     </div>
+  );
+}
+
+function PageWrapper({ children }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 100 }}
+      transition={{ duration: 0.5 }}
+    >
+      {children}
+    </motion.div>
   );
 }
 
